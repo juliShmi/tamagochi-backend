@@ -9,7 +9,9 @@ public class Animal {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name="id")
-    private Long id;
+    private Integer id;
+    @Column(name="uuid")
+    private String uuid;
     @Column(name="name")
     private String name;
     @Column(name = "age")
@@ -19,6 +21,13 @@ public class Animal {
     @Column(name = "satiation")
     private double satiation;
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
 
     public String getName() {
         return name;
@@ -52,11 +61,11 @@ public class Animal {
         this.age = age;
     }
 
-    public void setId(Long id) {
+    public void setId(Integer id) {
         this.id = id;
     }
 
-    public Long getId() {
+    public Integer getId() {
         return id;
     }
 }
