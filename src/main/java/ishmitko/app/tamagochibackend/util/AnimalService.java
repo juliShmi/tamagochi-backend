@@ -8,6 +8,8 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
+import java.util.UUID;
+
 @Service
 public class AnimalService {
 
@@ -30,7 +32,7 @@ public class AnimalService {
         animalRepository.save(animal);
     }
 
-    public Animal findById(long id) {
+    public Animal findById(int id) {
         return animalRepository.findById(id).orElse(null);
     }
 
@@ -44,6 +46,7 @@ public class AnimalService {
     private Animal convertToAnimal(AnimalNameHolder animalNameHolder) {
         Animal animal = new Animal();
         animal.setName(animalNameHolder.getName());
+        animal.setUuid(UUID.randomUUID().toString());
         animal.setAge(1);
         animal.setHealth(maxHealth);
         animal.setSatiation(maxSatiation);

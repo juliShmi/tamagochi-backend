@@ -4,14 +4,16 @@ public class AnimalDTO {
 
     public AnimalDTO() {}
 
-    public AnimalDTO(String name, Integer age, double health, double satiation) {
+    public AnimalDTO(String uuid, String name, Integer age, double health, double satiation) {
         this.name = name;
+        this.uuid = uuid;
         this.age = age;
         this.health = health;
         this.satiation = satiation;
     }
 
     private String name;
+    private String uuid;
     public Integer age;
     private double health;
     private double satiation;
@@ -48,10 +50,19 @@ public class AnimalDTO {
         this.satiation = satiation;
     }
 
+    public String getUuid() {
+        return uuid;
+    }
+
+    public void setUuid(String uuid) {
+        this.uuid = uuid;
+    }
+
     @Override
     public String toString() {
         return "AnimalDTO{" +
                 "name='" + name + '\'' +
+                ", uuid='" + uuid + '\'' +
                 ", age=" + age +
                 ", health=" + health +
                 ", satiation=" + satiation +
