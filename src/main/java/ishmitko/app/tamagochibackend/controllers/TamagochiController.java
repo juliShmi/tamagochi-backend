@@ -2,9 +2,8 @@ package ishmitko.app.tamagochibackend.controllers;
 
 import ishmitko.app.tamagochibackend.dto.AnimalDTO;
 import ishmitko.app.tamagochibackend.dto.AnimalNameHolder;
-import ishmitko.app.tamagochibackend.model.Animal;
+import ishmitko.app.tamagochibackend.exceptions.AnimalNotFoundException;
 import ishmitko.app.tamagochibackend.util.AnimalService;
-import org.springframework.http.HttpHeaders;
 
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -21,15 +20,15 @@ public class TamagochiController {
         this.animalService = animalService;
     }
 
-    @GetMapping("/{id}")
-    @ResponseBody
-    public Animal getAnimal(@PathVariable("id") int id) {
-        return animalService.findById(id);
+    @GetMapping(value="/{id}", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"})
+    public ResponseEntity<?> getAnimal(@PathVariable("id") String uuid) {
+        AnimalDTO animalDTO = animalService.getAnimal(uuid);
+        return ResponseEntity.ok()
+                .body(animalDTO);
     }
 
     @PostMapping(value = "/animal", produces = {"application/json;charset=utf-8"}, consumes = {"application/json;charset=utf-8"})
     public ResponseEntity<?> createAnimal(@RequestBody AnimalNameHolder animalNameHolder) {
-        System.out.println(animalNameHolder);
         AnimalDTO animalDTO = animalService.createAnimal(animalNameHolder);
         return ResponseEntity.ok()
                 .body(animalDTO);

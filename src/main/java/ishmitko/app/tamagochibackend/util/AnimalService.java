@@ -2,6 +2,7 @@ package ishmitko.app.tamagochibackend.util;
 
 import ishmitko.app.tamagochibackend.dto.AnimalDTO;
 import ishmitko.app.tamagochibackend.dto.AnimalNameHolder;
+import ishmitko.app.tamagochibackend.exceptions.AnimalNotFoundException;
 import ishmitko.app.tamagochibackend.model.Animal;
 import ishmitko.app.tamagochibackend.repositories.AnimalRepository;
 import org.modelmapper.ModelMapper;
@@ -9,6 +10,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.UUID;
+import static ishmitko.app.tamagochibackend.util.ErrorMessages.ANIMAL_NOT_FOUND;
 
 @Service
 public class AnimalService {
@@ -32,6 +34,20 @@ public class AnimalService {
         animalRepository.save(animal);
     }
 
+    public AnimalDTO getAnimal(String uuid) {
+        Animal animal = animalRepository.findByUuid(uuid)
+                .orElseThrow(()-> new AnimalNotFoundException(ANIMAL_NOT_FOUND));
+
+//        Same as 39-40 lines
+//
+//        Optional<Animal> optionalAnimalReturnedByRepository = animalRepository.findByUuid(uuid);
+//
+//        Animal extractedAnimalFromOptional = optionalAnimalReturnedByRepository
+//                .orElseThrow(()-> new AnimalNotFoundException(ANIMAL_NOT_FOUND));
+
+        return mapAnimalToDTO(animal);
+    }
+
     public Animal findById(int id) {
         return animalRepository.findById(id).orElse(null);
     }
@@ -39,8 +55,7 @@ public class AnimalService {
     public AnimalDTO createAnimal(AnimalNameHolder animalNameHolder) {
         Animal animal = convertToAnimal(animalNameHolder);
         save(animal);
-        ModelMapper modelMapper = new ModelMapper();
-        return modelMapper.map(animal, AnimalDTO.class);
+        return mapAnimalToDTO(animal);
     }
 
     private Animal convertToAnimal(AnimalNameHolder animalNameHolder) {
@@ -51,6 +66,11 @@ public class AnimalService {
         animal.setHealth(maxHealth);
         animal.setSatiation(maxSatiation);
         return animal;
+    }
+
+    private AnimalDTO mapAnimalToDTO(Animal animal) {
+        ModelMapper modelMapper = new ModelMapper();
+        return modelMapper.map(animal, AnimalDTO.class);
     }
 }
 
